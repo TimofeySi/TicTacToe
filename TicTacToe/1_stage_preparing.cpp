@@ -10,79 +10,86 @@ void MainWindow::constructorProperties()
 
     mainFont = new QFont("Sylfaen");
 
-    this->resize(QSize(230, 120));
-    this->setWindowFlags(Qt::Dialog | Qt::MSWindowsFixedSizeDialogHint);
-    this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
-
     this->setWindowIcon(QIcon("resourse/tic-tac-toe-ICON"));
     this->setWindowTitle("TicTacToe");
 
-    notPressedChooseButton = "background-color: rgb(205, 133, 63);";
-    enableChooseButton = "background-color: rgb(244, 164, 96);";
-    disableChooseButton = "background-color: rgb(210, 105, 30);";
-    crossImageURL = "image: url(resourse/cancel_80.png);";
-    noughtImageURL = "image: url(resourse/o_80.png);";
+    notPressedChooseButton = "background-color: rgb(0, 191, 255);";
+    enableChooseButton = "background-color: rgb(135, 206, 250);";
+    disableChooseButton = "background-color: rgb(30, 144, 255);";
+    crossImageURL = "image: url(resourse/interface_cross.png);";
+    noughtImageURL = "image: url(resourse/interface_zero.png);";
 
-    launchButton = new QPushButton("Запуск", this);
-    launchButton->setCursor(Qt::PointingHandCursor);
-    launchButton->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
-    launchButton->setFont(*mainFont);
-    launchButton->setStyleSheet(".QPushButton {"
-                                "background-color: rgb(0, 128, 0);"
-                                "font: 20px;"
-                                "}"
-                                ".QPushButton:pressed {"
-                                "background-color: rgb(154, 205, 50);"
-                                "}");
-    connect(launchButton, SIGNAL(clicked()), this, SLOT(launchButton_clicked()));
+    checkURL = "image: url(resourse/check.png);";
+    blockURL = "image: url(resourse/block.png);";
 
-    layout = new QGridLayout(this);
-    centralWidget->setLayout(layout);
-    layout->addWidget(launchButton);
+    prepearingMenu();
 }
 
 
 void MainWindow::prepearingMenu()
 {
     this->setWindowFlags(Qt::Window);
-    this->resize(QSize(1100, 836));
+    this->resize(QSize(852, 418));
     this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
     this->setStyleSheet("QMainWindow {"
                         "background-image: url(resourse/background1.jpg);"
                         "}");
 
-//    crossFirstLayout = new QHBoxLayout(this);
+    crossFirstLayout = new QHBoxLayout(this);
+    crossFirstLayout->setAlignment(Qt::AlignCenter);
 
-//    randomLayout = new QHBoxLayout(this);
+    randomLayout = new QHBoxLayout(this);
+    randomLayout->setAlignment(Qt::AlignCenter);
+
+    crossFirstButton = new QPushButton(this);
+    crossFirstButton->setCursor(Qt::PointingHandCursor);
+    crossFirstButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    crossFirstButton->setStyleSheet(".QPushButton {"
+                                    "background-color: rgb(20, 20, 20);"
+                                    + checkURL +
+                                    "}");
+    connect(crossFirstButton, SIGNAL(clicked()), this, SLOT(crossFirstButton_clicked()));
 
 //    crossFirstCheckBox = new QCheckBox(this);
 //    crossFirstCheckBox->setCursor(Qt::PointingHandCursor);
-
 //    crossFirstCheckBox->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-//    crossFirstLabel = new QLabel(this);
-//    crossFirstLabel->setText("Крестики ходят первые");
-//    crossFirstLabel->setStyleSheet(".QLabel {"
-//                                 "font: 28px;"
-//                                 "color: white;"
-//                                 "}");
+    crossFirstLabel = new QLabel(this);
+    crossFirstLabel->setText("Крестики ходят первые");
+    crossFirstLabel->setStyleSheet(".QLabel {"
+                                 "font: 28px;"
+                                 "color: white;"
+                                 "}");
 
-//    crossFirstLabel->setFont(*mainFont);
-//    crossFirstLabel->setAlignment(Qt::AlignCenter);
-//    crossFirstLabel->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    crossFirstLabel->setFont(*mainFont);
+    crossFirstLabel->setAlignment(Qt::AlignCenter);
+    crossFirstLabel->setMinimumHeight(45);
+    crossFirstLabel->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+
+    randomButton = new QPushButton(this);
+    randomButton->setCursor(Qt::PointingHandCursor);
+    randomButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    randomButton->setStyleSheet(".QPushButton {"
+                                    "background-color: rgb(20, 20, 20);"
+                                    + blockURL +
+                                    "}");
+
+    connect(randomButton, SIGNAL(clicked()), this, SLOT(randomButton_clicked()));
 
 //    randomCheckBox= new QCheckBox(this);
 //    randomCheckBox->setCursor(Qt::PointingHandCursor);
 //    randomCheckBox->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-//    randomLabel = new QLabel(this);
-//    randomLabel->setText("Случайная очерёдность");
-//    randomLabel->setStyleSheet(".QLabel {"
-//                                 "font: 28px;"
-//                                 "color: white;"
-//                                 "}");
 
-//    randomLabel->setFont(*mainFont);
-//    randomLabel->setAlignment(Qt::AlignCenter);
-//    randomLabel->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    randomLabel = new QLabel(this);
+    randomLabel->setText("Случайная очерёдность");
+    randomLabel->setStyleSheet(".QLabel {"
+                                 "font: 28px;"
+                                 "color: white;"
+                                 "}");
+
+    randomLabel->setFont(*mainFont);
+    randomLabel->setAlignment(Qt::AlignCenter);
+    randomLabel->setMinimumHeight(45);
+    randomLabel->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
 
     centralWidget = new QWidget(this);
     this->setCentralWidget(centralWidget);
@@ -91,29 +98,29 @@ void MainWindow::prepearingMenu()
     centralWidget->setLayout(mainLayout);
 
     sideLayout = new QVBoxLayout(this);
-    sideLayout->setAlignment(Qt::AlignCenter);
+//    sideLayout->setAlignment(Qt::AlignCenter);
 
     playGroupBox = new QGroupBox(this);
-    playGroupBox->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
+    playGroupBox->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
 
     playGroupBoxLayout = new QVBoxLayout(this);
 
     characterChooseLayout = new QHBoxLayout(this);
 
-    screenSaver = new SFMLScreensaver(this);
-    unsigned screenSaver_height = 780; // 797
-    unsigned screenSaver_width = 780; // 989
-    screenSaver->setMaximumSize(QSize(screenSaver_width, screenSaver_height));
-    screenSaver->setMinimumSize(QSize(screenSaver_width, screenSaver_height));
-    screenSaver->sizeHint().setHeight(screenSaver_height);
-    screenSaver->sizeHint().setWidth(screenSaver_width);
-    screenSaver->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
+//    screenSaver = new SFMLScreensaver(this);
+//    unsigned screenSaver_height = 780; // 797
+//    unsigned screenSaver_width = 780; // 989
+//    screenSaver->setMaximumSize(QSize(screenSaver_width, screenSaver_height));
+//    screenSaver->setMinimumSize(QSize(screenSaver_width, screenSaver_height));
+//    screenSaver->sizeHint().setHeight(screenSaver_height);
+//    screenSaver->sizeHint().setWidth(screenSaver_width);
+//    screenSaver->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
 
     leaderBoard = new SFMLLeaderBoard(this);
-    leaderBoard->setMinimumSize(QSize(350, 500));
-    leaderBoard->setMaximumSize(QSize(350, 500));
-    leaderBoard->sizeHint().setHeight(500);
-    leaderBoard->sizeHint().setWidth(350);
+    leaderBoard->setMinimumSize(QSize(500, 400));
+    leaderBoard->setMaximumSize(QSize(500, 400));
+    leaderBoard->sizeHint().setHeight(400);
+    leaderBoard->sizeHint().setWidth(500);
     leaderBoard->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
     deserialization();
     leaderBoard->setLeadersList(leadersList);
@@ -123,6 +130,7 @@ void MainWindow::prepearingMenu()
     crossButton->setStyleSheet(".QPushButton {"
                                + crossImageURL
                                + notPressedChooseButton +
+                               "border-radius: 20px;"
                                "}");
 
     crossButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
@@ -134,7 +142,9 @@ void MainWindow::prepearingMenu()
     noughtButton->setStyleSheet(".QPushButton {"
                                 + noughtImageURL
                                 + notPressedChooseButton +
+                                "border-radius: 20px;"
                                 "}");
+
     noughtButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     noughtButton->setCursor(Qt::PointingHandCursor);
     connect(noughtButton, SIGNAL(clicked()), this, SLOT(noughtButton_clicked()));
@@ -143,22 +153,26 @@ void MainWindow::prepearingMenu()
     playButton->setFont(*mainFont);
     playButton->setStyleSheet(".QPushButton {"
                               "background-color: rgb(46, 139, 87);"
+                              "border-radius: 10px;"
                               "font: 24px;"
                               "}"
                               ".QPushButton:pressed {"
                               "background-color: rgb(60, 179, 113);"
+                              "border-radius: 10px;"
                               "}");
 
     playButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     playButton->setCursor(Qt::PointingHandCursor);
     connect(playButton, SIGNAL(clicked()), this, SLOT(playButton_clicked()));
 
-    mainLayout->addWidget(screenSaver);
+//    mainLayout->addWidget(screenSaver);
+    mainLayout->addWidget(leaderBoard);
     mainLayout->addLayout(sideLayout);
 
-    sideLayout->addWidget(leaderBoard);
-//    sideLayout->addItem(crossFirstLayout);
-//    sideLayout->addItem(randomLayout);
+//    sideLayout->addWidget(leaderBoard);
+
+    sideLayout->addItem(crossFirstLayout);
+    sideLayout->addItem(randomLayout);
     sideLayout->addWidget(playGroupBox);
 
     playGroupBox->setLayout(playGroupBoxLayout);
@@ -169,30 +183,17 @@ void MainWindow::prepearingMenu()
     characterChooseLayout->addWidget(crossButton);
     characterChooseLayout->addWidget(noughtButton);
 
-//    crossFirstLayout->addWidget(crossFirstCheckBox);
-//    crossFirstLayout->addWidget(crossFirstLabel);
+    crossFirstLayout->addWidget(crossFirstButton);
+    crossFirstLayout->addWidget(crossFirstLabel);
 
-//    randomLayout->addWidget(randomCheckBox);
-//    randomLayout->addWidget(randomLabel);
+    randomLayout->addWidget(randomButton);
+    randomLayout->addWidget(randomLabel);
 
     userCharacter = int(Character::None);
+    gameMode = int(GameMode::CrossFirst);
 
     this->setVisible(true);
-    waitTimer->stop();
     this->update();
-}
-
-void MainWindow::launchButton_clicked()
-{
-    this->setVisible(false);
-
-    delete launchButton;
-    delete layout;
-
-    waitTimer = new QTimer(this);
-    connect(waitTimer, SIGNAL(timeout()), this, SLOT(prepearingMenu()));
-    waitTimer->setInterval(400);
-    waitTimer->start();
 }
 
 void MainWindow::crossButton_clicked()
@@ -203,12 +204,15 @@ void MainWindow::crossButton_clicked()
         noughtButton->setEnabled(true);
 
         crossButton->setStyleSheet(".QPushButton {"
-                                   "image: url(resourse/cancel_80.png);"
+                                   + crossImageURL
                                    + enableChooseButton +
+                                   "border-radius: 20px;"
+                                   "border: 5px solid rgb(128, 0, 128);"
                                    "}"); // pressed
         noughtButton->setStyleSheet(".QPushButton {"
-                                    "image: url(resourse/o_80.png);"
+                                    + noughtImageURL
                                     + disableChooseButton +
+                                    "border-radius: 20px;"
                                     "}"); // depressed
         userCharacter = int(Character::Cross);
     }
@@ -222,13 +226,50 @@ void MainWindow::noughtButton_clicked()
         noughtButton->setEnabled(false);
 
         noughtButton->setStyleSheet(".QPushButton {"
-                                    "image: url(resourse/o_80.png);"
+                                    + noughtImageURL
                                     + enableChooseButton +
+                                    "border-radius: 20px;"
+                                    "border: 5px solid rgb(128, 0, 128);"
                                     "}"); // pressed
         crossButton->setStyleSheet(".QPushButton {"
-                                   "image: url(resourse/cancel_80.png);"
+                                   + crossImageURL
                                    + disableChooseButton +
+                                   "border-radius: 20px;"
                                    "}"); // depressed
         userCharacter = int(Character::Nought);
+    }
+}
+
+
+void MainWindow::randomButton_clicked()
+{
+    if (gameMode == int(GameMode::CrossFirst))
+    {
+        randomButton->setStyleSheet(".QPushButton {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        + checkURL +
+                                        "}");
+        crossFirstButton->setStyleSheet(".QPushButton {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        + blockURL +
+                                        "}");
+
+        gameMode = int(GameMode::Random);
+    }
+}
+
+void MainWindow::crossFirstButton_clicked()
+{
+    if (gameMode == int(GameMode::Random))
+    {
+        crossFirstButton->setStyleSheet(".QPushButton {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        + checkURL +
+                                        "}");
+        randomButton->setStyleSheet(".QPushButton {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        + blockURL +
+                                        "}");
+        gameMode = int(GameMode::CrossFirst);
     }
 }

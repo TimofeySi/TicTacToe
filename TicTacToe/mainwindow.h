@@ -41,8 +41,6 @@ private:
 
     QFont *mainFont;
 
-    QTimer *waitTimer;
-
     SFMLScreensaver *screenSaver;
     SFMLLeaderBoard *leaderBoard;
     SFMLTicTacToe *ticTacToe;
@@ -68,7 +66,6 @@ private:
     QGroupBox *playGroupBox;
     QGroupBox *inGameGroupBox;
 
-    QPushButton *launchButton;
     QPushButton *crossButton;
     QPushButton *noughtButton;
     QPushButton *playButton;
@@ -76,6 +73,8 @@ private:
     QPushButton *againButton;
     QPushButton *finishButton;
     QPushButton *saveButton;
+    QPushButton *crossFirstButton;
+    QPushButton *randomButton;
 
     QPushButton *crossLamp;
     QPushButton *noughtLamp;
@@ -97,12 +96,15 @@ private:
 
     int userCharacter;
     int computerCharacter;
+    int gameMode;
 
     QString notPressedChooseButton;
     QString enableChooseButton;
     QString disableChooseButton;
     QString crossImageURL;
     QString noughtImageURL;
+    QString checkURL;
+    QString blockURL;
 
     QFrame *lineBetweenMoveAndScore;
     QFrame *lineBetweenScoreAndButtons;
@@ -117,12 +119,11 @@ private:
     std::vector<Leader> leadersList;
 
 private slots:
-    void launchButton_clicked();
-    void prepearingMenu();
-
     void crossButton_clicked();
     void noughtButton_clicked();
     void playButton_clicked();
+    void randomButton_clicked();
+    void crossFirstButton_clicked();
 
     void continueButton_clicked();
     void againButton_clicked();
@@ -136,6 +137,8 @@ private slots:
 
 private:
     void constructorProperties();
+
+    void prepearingMenu();
 
     int randomInt(int min, int max);
 

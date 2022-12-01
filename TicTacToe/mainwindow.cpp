@@ -27,23 +27,37 @@ void MainWindow::saveRecord()
                                  "Введите своё имя:");
         return;
     }
+    for (auto &elem : leadersList)
+        if (elem.getName() == name)
+        {
+            saveRecordLabel->setText("Такое имя уже присутствует!\n"
+                                     "Введите своё имя:");
+            return;
+        }
 
     float comp_score = (computerScoreLabel->text() == "0") ? (0.7) : (computerScoreLabel->text().toInt());
-    int coefficient = yourScoreLabel->text().toFloat() / comp_score;
+    float coefficient = yourScoreLabel->text().toFloat() / comp_score;
 
     std::map<std::string, std::string> inner_map = {{"your score", yourScoreLabel->text().toStdString()},
                                                     {"computer score", computerScoreLabel->text().toStdString()},
                                                     {"name", name}
                                                    };
+
+    while (leaderboardList.find(coefficient) != leaderboardList.end())
+        coefficient += 0.1;
+
     leaderboardList.insert(std::make_pair(coefficient, inner_map));
 
     for (auto it = leaderboardList.rbegin(); it != leaderboardList.rend(); ++it)
     {
-        leadersList.push_back(Leader(it->second["name"], it->second["your score"], it->second["computer score"]));
+        if (std::find(leadersList.begin(), leadersList.end(), Leader(it->second["name"], it->second["your score"], it->second["computer score"])) == leadersList.end())
+            leadersList.push_back(Leader(it->second["name"], it->second["your score"], it->second["computer score"]));
+        else
+            continue;
     }
 
-    if (leadersList.size() > 10)
-        leadersList.erase(leadersList.begin() + 10, leadersList.end() - 1);
+    while (leadersList.size() > 10)
+        leadersList.erase(leadersList.begin() + 10);
     leaderBoard->setLeadersList(leadersList);
     serialization();
 
@@ -53,30 +67,51 @@ void MainWindow::saveRecord()
 
     mainLayout->removeWidget(ticTacToe);
     mainLayout->removeItem(sideLayout);
-    mainLayout->addWidget(screenSaver);
+//    mainLayout->addWidget(screenSaver);
+    mainLayout->addWidget(leaderBoard);
     mainLayout->addItem(sideLayout);
     sideLayout->removeWidget(inGameGroupBox);
-    sideLayout->addWidget(leaderBoard);
+//    sideLayout->addWidget(leaderBoard);
+    sideLayout->addItem(crossFirstLayout);
+    sideLayout->addItem(randomLayout);
     sideLayout->addWidget(playGroupBox);
 
-    screenSaver->QWidget::setVisible(true);
+//    screenSaver->QWidget::setVisible(true);
     leaderBoard->QWidget::setVisible(true);
     playGroupBox->QWidget::setVisible(true);
+    randomLabel->QWidget::setVisible(true);
+    randomButton->QWidget::setVisible(true);
+    crossFirstButton->QWidget::setVisible(true);
+    crossFirstLabel->QWidget::setVisible(true);
+
+    this->resize(QSize(852, 418));
+    this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
 
     crossButton->setStyleSheet(".QPushButton {"
-                               "image: url(resourse/cancel_80.png);"
+                               + crossImageURL
                                + notPressedChooseButton +
+                               "border-radius: 8px;"
                                "}");
     noughtButton->setStyleSheet(".QPushButton {"
-                                "image: url(resourse/o_80.png);"
+                                + crossImageURL
                                 + notPressedChooseButton +
+                                "border-radius: 8px;"
                                 "}");
+    randomButton->setStyleSheet(".QPushButton {"
+                                    "background-color: rgb(20, 20, 20);"
+                                    + blockURL +
+                                    "}");
+    crossFirstButton->setStyleSheet(".QPushButton {"
+                                    "background-color: rgb(20, 20, 20);"
+                                    + checkURL +
+                                    "}");
     crossButton->setEnabled(true);
     noughtButton->setEnabled(true);
 
     ticTacToe->restartGameList();
 
     userCharacter = int(Character::None);
+    gameMode = int(GameMode::CrossFirst);
 
 //    delete saveRecordLayout;
     delete saveRecordDialog;
@@ -84,6 +119,7 @@ void MainWindow::saveRecord()
 //    delete saveButton;
 //    delete nameLineEdit;
 
+    leaderBoard->update();
     this->update();
 
 }
@@ -108,6 +144,8 @@ void MainWindow::deserialization()
             leadersList.push_back(Leader(name, author, pages));
         }
     }
+    else
+        leadersList.clear();
     file.close();
 }
 

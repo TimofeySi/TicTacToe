@@ -61,7 +61,18 @@ void SFMLTicTacToe::updateFrame()
         {
             QWidget::setEnabled(true);
             paintMode = PaintMode::JustField;
-            int first_move = std::rand() % ((int(Player::Computer) + 1) - int(Player::User)) + int(Player::User);
+
+            int first_move;
+            if (gameMode == int(GameMode::Random))
+                first_move = std::rand() % ((int(Player::Computer) + 1) - int(Player::User)) + int(Player::User);
+            else
+            {
+                if (int(userCharacter) == int(Character::Cross))
+                    first_move = int(Player::User);
+                else
+                    first_move = int(Player::Computer);
+            }
+
             emit countdownOver(first_move);
         }
     }
@@ -194,11 +205,13 @@ void SFMLTicTacToe::restartGameList()
 }
 
 
-void SFMLTicTacToe::countdown()
+void SFMLTicTacToe::countdown(int game_mode)
 {
     paintMode = PaintMode::Countdown;
 
     Victory = false;
+
+    gameMode = game_mode;
 
     countdownNumber = 3500;
 

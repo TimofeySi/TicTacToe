@@ -6,6 +6,7 @@
 #include <QTimer>
 #include <map>
 #include <algorithm>
+#include <fstream>
 
 #include "leader.h"
 
@@ -67,8 +68,13 @@ public:
     SFMLLeaderBoard(QWidget *parent, const QPoint &position = QPoint(0,0), const QSize &size = QSize(0,0));
 
 private:
+    unsigned frameNumber;
+
+private:
     void updateFrame() override;
     void initialize() override;
+
+    void frames_loading();
 
 public:
     void setLeadersList(std::vector<Leader> leader_list);
@@ -79,6 +85,7 @@ private:
 
     sf::Texture texture;
 
+    sf::Text leaderboardsText;
     sf::Text nameHeaderText;
     sf::Text userScoreHeaderText;
     sf::Text computerScoreHeaderText;
@@ -87,4 +94,7 @@ private:
 
     std::vector<Leader> leadersList;
     std::map<float, std::map<std::string, sf::Text>> leaderRows;
+
+    std::vector<sf::Texture>backgroundFrameTexture;
+    std::vector<sf::Sprite> backgroundFrameSprite;
 };

@@ -11,13 +11,20 @@ void MainWindow::playButton_clicked()
 
 
     leaderBoard->QWidget::setVisible(false);
-    screenSaver->QWidget::setVisible(false);
-    playGroupBox->setVisible(false);
-    mainLayout->removeWidget(screenSaver);
-    mainLayout->removeItem(sideLayout);
-    sideLayout->removeWidget(leaderBoard);
-    sideLayout->removeWidget(playGroupBox);
+    randomLabel->QWidget::setVisible(false);
+    randomButton->QWidget::setVisible(false);
+    crossFirstButton->QWidget::setVisible(false);
+    crossFirstLabel->QWidget::setVisible(false);
 
+//    screenSaver->QWidget::setVisible(false);
+    playGroupBox->setVisible(false);
+//    mainLayout->removeWidget(screenSaver);
+    mainLayout->removeWidget(leaderBoard);
+    mainLayout->removeItem(sideLayout);
+//    sideLayout->removeWidget(leaderBoard);
+    sideLayout->removeWidget(playGroupBox);
+    sideLayout->removeItem(crossFirstLayout);
+    sideLayout->removeItem(randomLayout);
 
 
     ticTacToe = new SFMLTicTacToe(this);
@@ -99,6 +106,7 @@ void MainWindow::playButton_clicked()
     continueButton->setStyleSheet(".QPushButton {"
                                   "font: 24px;"
                                   "background-color: rgb(238, 130, 238);"
+                                  "border-radius: 10px;"
                                   "}");
     continueButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     continueButton->setCursor(Qt::PointingHandCursor);
@@ -111,6 +119,7 @@ void MainWindow::playButton_clicked()
     againButton->setStyleSheet(".QPushButton {"
                                "font: 24px;"
                                "background-color: rgb(255, 165, 0);"
+                               "border-radius: 10px;"
                                "}");
     againButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     againButton->setCursor(Qt::PointingHandCursor);
@@ -122,6 +131,7 @@ void MainWindow::playButton_clicked()
     finishButton->setStyleSheet(".QPushButton {"
                                 "font: 24px;"
                                 "background-color: rgb(255, 69, 0);"
+                                "border-radius: 10px;"
                                 "}");
     finishButton->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     finishButton->setCursor(Qt::PointingHandCursor);
@@ -131,6 +141,7 @@ void MainWindow::playButton_clicked()
     crossLamp->setStyleSheet(".QPushButton {"
                              + crossImageURL +
                              "background-color: rgb(255, 255, 255);"
+                             "border-radius: 8px;"
                              "}");
     crossLamp->setMinimumSize(QSize(150, 150));
     crossLamp->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
@@ -141,6 +152,7 @@ void MainWindow::playButton_clicked()
     noughtLamp->setStyleSheet(".QPushButton {"
                               + noughtImageURL +
                               "background-color: rgb(255, 255, 255);"
+                              "border-radius: 8px;"
                               "}");
     noughtLamp->setMinimumSize(QSize(150, 150));
     noughtLamp->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
@@ -241,9 +253,10 @@ void MainWindow::playButton_clicked()
 
     ticTacToe->show();
     this->update();
+    this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
 
     //    inGameGroupBox->setEnabled(false);
-    ticTacToe->countdown();
+    ticTacToe->countdown(gameMode);
     //    inGameGroupBox->setEnabled(true);
 }
 
@@ -256,19 +269,22 @@ void MainWindow::continueButton_clicked()
     crossLamp->setStyleSheet(".QPushButton {"
                              + crossImageURL +
                              "background-color: rgb(255, 255, 255);"
+                             "border-radius: 8px;"
                              "}");
 
     noughtLamp->setStyleSheet(".QPushButton {"
                               + noughtImageURL +
                               "background-color: rgb(255, 255, 255);"
+                              "border-radius: 8px;"
                               "}");
     continueButton->setStyleSheet(".QPushButton {"
                                   "font: 24px;"
                                   "background-color: rgb(238, 130, 238);"
+                                  "border-radius: 10px;"
                                   "}");
     continueButton->setEnabled(false);
 
-    ticTacToe->countdown();
+    ticTacToe->countdown(gameMode);
 }
 
 void MainWindow::againButton_clicked()
@@ -291,14 +307,16 @@ void MainWindow::againButton_clicked()
         crossLamp->setStyleSheet(".QPushButton {"
                                  + crossImageURL +
                                  "background-color: rgb(255, 255, 255);"
+                                 "border-radius: 8px;"
                                  "}");
 
         noughtLamp->setStyleSheet(".QPushButton {"
                                   + noughtImageURL +
                                   "background-color: rgb(255, 255, 255);"
+                                  "border-radius: 8px;"
                                   "}");
 
-        ticTacToe->countdown();
+        ticTacToe->countdown(gameMode);
     }
 }
 
@@ -316,36 +334,57 @@ void MainWindow::finishButton_clicked()
     {
                 if (yourScoreLabel->text() == "0")
                 {
-                    QMessageBox::warning(this, "Ошибка", "У Вас отсутсвуют очки!");
+                    QMessageBox::warning(this, "Ошибка", "У Вас отсутсвуют очки! Невозможно сохранить результат!");
                     ticTacToe->QWidget::setVisible(false);
                     inGameGroupBox->QWidget::setVisible(false);
 
                     mainLayout->removeWidget(ticTacToe);
+                    mainLayout->addWidget(leaderBoard);
                     mainLayout->removeItem(sideLayout);
-                    mainLayout->addWidget(screenSaver);
+            //                    mainLayout->addWidget(screenSaver);
                     mainLayout->addItem(sideLayout);
                     sideLayout->removeWidget(inGameGroupBox);
-                    sideLayout->addWidget(leaderBoard);
+            //                    sideLayout->addWidget(leaderBoard);
+                    sideLayout->addItem(crossFirstLayout);
+                    sideLayout->addItem(randomLayout);
                     sideLayout->addWidget(playGroupBox);
 
-                    screenSaver->QWidget::setVisible(true);
+//                    screenSaver->QWidget::setVisible(true);
                     leaderBoard->QWidget::setVisible(true);
                     playGroupBox->QWidget::setVisible(true);
+                    randomLabel->QWidget::setVisible(true);
+                    randomButton->QWidget::setVisible(true);
+                    crossFirstButton->QWidget::setVisible(true);
+                    crossFirstLabel->QWidget::setVisible(true);
+
+                    this->resize(QSize(852, 418));
+                    this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
 
                     crossButton->setStyleSheet(".QPushButton {"
-                                               "image: url(resourse/cancel_80.png);"
+                                               + crossImageURL
                                                + notPressedChooseButton +
+                                               "border-radius: 20px;"
                                                "}");
                     noughtButton->setStyleSheet(".QPushButton {"
-                                               "image: url(resourse/o_80.png);"
+                                               + crossImageURL
                                                 + notPressedChooseButton +
+                                                "border-radius: 20px;"
                                                "}");
+                    randomButton->setStyleSheet(".QPushButton {"
+                                                    "background-color: rgb(20, 20, 20);"
+                                                    + blockURL +
+                                                    "}");
+                    crossFirstButton->setStyleSheet(".QPushButton {"
+                                                    "background-color: rgb(20, 20, 20);"
+                                                    + checkURL +
+                                                    "}");
                     crossButton->setEnabled(true);
                     noughtButton->setEnabled(true);
 
                     ticTacToe->restartGameList();
 
                     userCharacter = int(Character::None);
+                    gameMode = int(GameMode::CrossFirst);
 
                     this->update();
                 }
@@ -383,31 +422,52 @@ void MainWindow::finishButton_clicked()
         inGameGroupBox->QWidget::setVisible(false);
 
         mainLayout->removeWidget(ticTacToe);
+        mainLayout->addWidget(leaderBoard);
         mainLayout->removeItem(sideLayout);
-        mainLayout->addWidget(screenSaver);
+//                    mainLayout->addWidget(screenSaver);
         mainLayout->addItem(sideLayout);
         sideLayout->removeWidget(inGameGroupBox);
-        sideLayout->addWidget(leaderBoard);
+//                    sideLayout->addWidget(leaderBoard);
+        sideLayout->addItem(crossFirstLayout);
+        sideLayout->addItem(randomLayout);
         sideLayout->addWidget(playGroupBox);
 
-        screenSaver->QWidget::setVisible(true);
+//                    screenSaver->QWidget::setVisible(true);
         leaderBoard->QWidget::setVisible(true);
         playGroupBox->QWidget::setVisible(true);
+        randomLabel->QWidget::setVisible(true);
+        randomButton->QWidget::setVisible(true);
+        crossFirstButton->QWidget::setVisible(true);
+        crossFirstLabel->QWidget::setVisible(true);
+
+        this->resize(QSize(852, 418));
+        this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
 
         crossButton->setStyleSheet(".QPushButton {"
-                                   "image: url(resourse/cancel_80.png);"
+                                   + crossImageURL
                                    + notPressedChooseButton +
+                                   "border-radius: 20px;"
                                    "}");
         noughtButton->setStyleSheet(".QPushButton {"
-                                    "image: url(resourse/o_80.png);"
+                                    + noughtImageURL
                                     + notPressedChooseButton +
+                                    "border-radius: 20px;"
                                     "}");
+        randomButton->setStyleSheet(".QPushButton {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        + blockURL +
+                                        "}");
+        crossFirstButton->setStyleSheet(".QPushButton {"
+                                        "background-color: rgb(20, 20, 20);"
+                                        + checkURL +
+                                        "}");
         crossButton->setEnabled(true);
         noughtButton->setEnabled(true);
 
         ticTacToe->restartGameList();
 
         userCharacter = int(Character::None);
+        gameMode = int(GameMode::CrossFirst);
 
         this->update();
     }
@@ -425,10 +485,12 @@ void MainWindow::madeMove(int player)
             crossLamp->setStyleSheet(".QPushButton {"
                                      "background-color: rgb(0, 255, 0);"
                                      + crossImageURL +
+                                     "border-radius: 8px;"
                                      "}");
             noughtLamp->setStyleSheet(".QPushButton {"
                                       "background-color: rgb(178, 34, 34);"
                                       + noughtImageURL +
+                                      "border-radius: 8px;"
                                       "}");
         }
         else if (userCharacter == int(Character::Nought))
@@ -436,10 +498,12 @@ void MainWindow::madeMove(int player)
             crossLamp->setStyleSheet(".QPushButton {"
                                      "background-color: rgb(178, 34, 34);"
                                      + crossImageURL +
+                                     "border-radius: 8px;"
                                      "}");
             noughtLamp->setStyleSheet(".QPushButton {"
                                       "background-color: rgb(0, 255, 0);"
                                       + noughtImageURL +
+                                      "border-radius: 8px;"
                                       "}");
         }
     }
@@ -451,10 +515,12 @@ void MainWindow::madeMove(int player)
             crossLamp->setStyleSheet(".QPushButton {"
                                      "background-color: rgb(0, 255, 0);"
                                      + crossImageURL +
+                                     "border-radius: 8px;"
                                      "}");
             noughtLamp->setStyleSheet(".QPushButton {"
                                       "background-color: rgb(178, 34, 34);"
                                       + noughtImageURL +
+                                      "border-radius: 8px;"
                                       "}");
         }
         else if (computerCharacter == int(Character::Nought))
@@ -462,10 +528,12 @@ void MainWindow::madeMove(int player)
             crossLamp->setStyleSheet(".QPushButton {"
                                      "background-color: rgb(178, 34, 34);"
                                      + crossImageURL +
+                                     "border-radius: 8px;"
                                      "}");
             noughtLamp->setStyleSheet(".QPushButton {"
                                       "background-color: rgb(0, 255, 0);"
                                       + noughtImageURL +
+                                      "border-radius: 8px;"
                                       "}");
         }
         ticTacToe->computerQueue();
@@ -480,6 +548,7 @@ void MainWindow::victory(int player)
     continueButton->setStyleSheet(".QPushButton {"
                                   "font: 24px;"
                                   "background-color: rgb(255, 0, 255);"
+                                  "border-radius: 10px;"
                                   "}");
 
     if (player == int(Player::Computer))

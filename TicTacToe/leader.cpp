@@ -34,3 +34,24 @@ void from_json(const json& j, Leader& leader) {
     leader.userScore = j.at("User score").get<std::string>();
     leader.computerScore = j.at("Computer score").get<std::string>();
 }
+
+
+bool operator==(const Leader &leader1, const Leader &leader2)
+{
+    if (leader1.Name == leader2.Name)
+    {
+        if (leader1.userScore == leader2.userScore)
+        {
+            if (leader1.computerScore == leader2.computerScore)
+            {
+                return true;
+            }
+            else
+                return false;
+        }
+        else
+            return false;
+    }
+    else
+        return false;
+}

@@ -10,6 +10,11 @@ enum class Direction {
     SecondaryDiagonal
 };
 
+enum class GameMode {
+    CrossFirst,
+    Random
+};
+
 class SFMLTicTacToe : public SFMLWidget
 {
     Q_OBJECT
@@ -20,7 +25,7 @@ public:
 public:
     void mousePressEvent(QMouseEvent*) override;
 
-    void countdown();
+    void countdown(int game_mode);
 
     void setUserCharacter(int);
     void setComputerCharacter(int);
@@ -52,6 +57,8 @@ signals:
 private:
     std::vector<std::vector<int>> charactersMatrixPosition;
     std::vector<std::vector<int>> cellWeightMatrix;
+
+    int gameMode;
 
     sf::Sprite fieldSprite;
     sf::Sprite crossSprite;

@@ -22,5 +22,7 @@ public:
 
     friend void to_json(json& j, const Leader& leader);
     friend void from_json(const json& j, Leader& leader);
+
+    friend bool operator==(const Leader &leader1, const Leader &leader2);
 };
 
