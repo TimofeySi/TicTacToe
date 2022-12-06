@@ -79,8 +79,6 @@ void SFMLLeaderBoard::updateFrame()
     else
         frameNumber += 1;
 
-//    RenderWindow::draw(backgroundSprite);
-
     RenderWindow::draw(leaderboardsText);
     RenderWindow::draw(nameHeaderText);
     RenderWindow::draw(userScoreHeaderText);
@@ -100,18 +98,12 @@ void SFMLLeaderBoard::initialize()
         drawTimer = new QTimer(this);
         drawTimer->setInterval(45);
 
-//        if (!texture.loadFromFile("resourse/0.gif"))
-//            qDebug() << "field didnt load";
-
         backgroundSprite.setTexture(texture);
         connect(drawTimer, SIGNAL(timeout()), this, SLOT(repaint()));
 
         font.loadFromFile("resourse/sylfaen.ttf");
 
         frames_loading();
-
-//        backgroundSprite.setTexture(texture);
-//        backgroundSprite.setPosition(sf::Vector2f((QWidget::size().width() - 500) / 2, 0));
 
         leaderboardsText.setString("LEADERBOARDS");
         leaderboardsText.setFont(font);
@@ -160,11 +152,20 @@ void SFMLLeaderBoard::initialize()
 
 void SFMLLeaderBoard::setLeadersList(std::vector<Leader> leader_list)
 {
+    leadersList.clear();
     leadersList = leader_list;
 
     for (unsigned i = 0; i != leadersList.size(); ++i)
     {
-        int coefficient = stof(leadersList[i].getUserScore()) / stoi(leadersList[i].getComputerScore());
+        float user_score_int;
+        float comp_score_int;
+        std::stringstream(leadersList[i].getUserScore()) >> user_score_int;
+        std::stringstream(leadersList[i].getComputerScore()) >> comp_score_int;
+
+        float coefficient = user_score_int / comp_score_int;
+
+        if (user_score_int == 0 || comp_score_int == 0)
+            coefficient = 0.01;
 
         sf::Text name(leadersList[i].getName(), font, 20);
         name.setFillColor(sf::Color::White);
@@ -194,7 +195,9 @@ void SFMLLeaderBoard::setLeadersList(std::vector<Leader> leader_list)
         };
 
         while (leaderRows.find(coefficient) != leaderRows.end())
+        {
             coefficient += 0.1;
+        }
 
         leaderRows.insert(std::make_pair(coefficient, text_map));
     }

@@ -140,8 +140,6 @@ private:
 
     void prepearingMenu();
 
-    int randomInt(int min, int max);
-
     void deserialization();
     void serialization();
 };

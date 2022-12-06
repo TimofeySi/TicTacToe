@@ -50,9 +50,6 @@ void MainWindow::prepearingMenu()
                                     "}");
     connect(crossFirstButton, SIGNAL(clicked()), this, SLOT(crossFirstButton_clicked()));
 
-//    crossFirstCheckBox = new QCheckBox(this);
-//    crossFirstCheckBox->setCursor(Qt::PointingHandCursor);
-//    crossFirstCheckBox->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
     crossFirstLabel = new QLabel(this);
     crossFirstLabel->setText("Крестики ходят первые");
     crossFirstLabel->setStyleSheet(".QLabel {"
@@ -75,10 +72,6 @@ void MainWindow::prepearingMenu()
 
     connect(randomButton, SIGNAL(clicked()), this, SLOT(randomButton_clicked()));
 
-//    randomCheckBox= new QCheckBox(this);
-//    randomCheckBox->setCursor(Qt::PointingHandCursor);
-//    randomCheckBox->setSizePolicy(QSizePolicy::Policy::Preferred, QSizePolicy::Policy::Preferred);
-
     randomLabel = new QLabel(this);
     randomLabel->setText("Случайная очерёдность");
     randomLabel->setStyleSheet(".QLabel {"
@@ -98,7 +91,6 @@ void MainWindow::prepearingMenu()
     centralWidget->setLayout(mainLayout);
 
     sideLayout = new QVBoxLayout(this);
-//    sideLayout->setAlignment(Qt::AlignCenter);
 
     playGroupBox = new QGroupBox(this);
     playGroupBox->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
@@ -123,7 +115,36 @@ void MainWindow::prepearingMenu()
     leaderBoard->sizeHint().setWidth(500);
     leaderBoard->setSizePolicy(QSizePolicy::Policy::Expanding, QSizePolicy::Policy::Expanding);
     deserialization();
+
+    for (auto &elem : leadersList)
+    {
+        float comp_score = 0.7;
+        float user_score;
+        std::stringstream(elem.getComputerScore()) >> comp_score;
+        std::stringstream(elem.getUserScore()) >> user_score;
+        float coefficient = user_score / comp_score;
+
+        std::map<std::string, std::string> inner_map = {{"your score", elem.getUserScore()},
+                                                        {"computer score", elem.getComputerScore()},
+                                                        {"name", elem.getName()}
+                                                       };
+
+        while (leaderboardList.find(coefficient) != leaderboardList.end())
+            coefficient -= 0.1;
+
+        leaderboardList.insert(std::make_pair(coefficient, inner_map));
+    }
+
+    leadersList.clear();
+    for (auto it = leaderboardList.rbegin(); it != leaderboardList.rend(); ++it)
+    {
+        if (std::find(leadersList.begin(), leadersList.end(), Leader(it->second["name"], it->second["your score"], it->second["computer score"])) == leadersList.end())
+            leadersList.push_back(Leader(it->second["name"], it->second["your score"], it->second["computer score"]));
+        else
+            continue;
+    }
     leaderBoard->setLeadersList(leadersList);
+
 
     crossButton = new QPushButton("");
     crossButton->setFont(*mainFont);
@@ -165,11 +186,8 @@ void MainWindow::prepearingMenu()
     playButton->setCursor(Qt::PointingHandCursor);
     connect(playButton, SIGNAL(clicked()), this, SLOT(playButton_clicked()));
 
-//    mainLayout->addWidget(screenSaver);
     mainLayout->addWidget(leaderBoard);
     mainLayout->addLayout(sideLayout);
-
-//    sideLayout->addWidget(leaderBoard);
 
     sideLayout->addItem(crossFirstLayout);
     sideLayout->addItem(randomLayout);

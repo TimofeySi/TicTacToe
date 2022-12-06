@@ -165,11 +165,12 @@ void SFMLTicTacToe::mousePressEvent(QMouseEvent*)
                     {
                         emit victory(int(Player::User));
                     }
-
-
-                    reviewAround(i, j);
-                    QWidget::update();
-                    emit countdownOver(int(Player::Computer));
+                    else
+                    {
+                        reviewAround(i, j);
+                        QWidget::update();
+                        emit countdownOver(int(Player::Computer));
+                    }
                 }
             }
     }
@@ -266,10 +267,12 @@ void SFMLTicTacToe::computerMove()
     {
         emit victory(int(Player::Computer));
     }
-
-    reviewAround(row, column);
-    QWidget::update();
-    emit countdownOver(int(Player::User));
+    else
+    {
+        reviewAround(row, column);
+        QWidget::update();
+        emit countdownOver(int(Player::User));
+    }
 }
 
 
@@ -484,7 +487,7 @@ void SFMLTicTacToe::victoryDefinition(int i, int j)
                         self_pattern += '1';
                 }
                 else
-                    break;
+                    continue;
             }
             else if (direction == int(Direction::Vectical))
             {
@@ -503,7 +506,7 @@ void SFMLTicTacToe::victoryDefinition(int i, int j)
                         self_pattern += '1';
                 }
                 else
-                    break;
+                    continue;
             }
             else if (direction == int(Direction::MainDiagonal))
             {
@@ -523,7 +526,7 @@ void SFMLTicTacToe::victoryDefinition(int i, int j)
                             self_pattern += '1';
                     }
                     else
-                        break;
+                        continue;
             }
             else if (direction == int(Direction::SecondaryDiagonal))
             {
@@ -543,7 +546,7 @@ void SFMLTicTacToe::victoryDefinition(int i, int j)
                             self_pattern += '1';
                     }
                     else
-                        break;
+                        continue;
             }
         }
 
@@ -553,28 +556,24 @@ void SFMLTicTacToe::victoryDefinition(int i, int j)
                 if (direction == int(Direction::Horizontal))
                 {
                     firstVictoryCoords = std::make_pair(border_thickness + (j + pattern.second.first) * plate_size, border_thickness + i * plate_size + 19);
-//                    secondVictoryCoords = std::make_pair(border_thickness + (j + pattern.second.second + 1) * plate_size, border_thickness + i * plate_size + 19);
                     angle = 0;
                     length = 200;
                 }
                 else if (direction == int(Direction::Vectical))
                 {
                     firstVictoryCoords = std::make_pair(border_thickness + j * plate_size + 19, border_thickness + (i + pattern.second.first) * plate_size);
-//                    secondVictoryCoords = std::make_pair(border_thickness + j  * plate_size + 19, border_thickness + (i - pattern.second.first) * plate_size);
                     angle = 90;
                     length = 200;
                 }
                 else if (direction == int(Direction::MainDiagonal))
                 {
                     firstVictoryCoords = std::make_pair(border_thickness + (j + pattern.second.first) * plate_size, border_thickness + (i + pattern.second.first) * plate_size);
-//                    secondVictoryCoords = std::make_pair(border_thickness + (j + pattern.second.second + 1) * plate_size, border_thickness + (i + pattern.second.second + 1) * plate_size);
                     angle = 45;
                     length = 280;
                 }
                 else if (direction == int(Direction::SecondaryDiagonal))
                 {
                     firstVictoryCoords = std::make_pair(border_thickness + (j + pattern.second.first) * plate_size, border_thickness + (i - pattern.second.first + 1) * plate_size);
-//                    secondVictoryCoords = std::make_pair(border_thickness + (j + pattern.second.second + 1) * plate_size, border_thickness + (i - pattern.second.second) * plate_size);
                     angle = 315;
                     length = 280;
                 }

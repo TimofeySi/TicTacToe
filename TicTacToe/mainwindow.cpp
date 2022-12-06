@@ -10,11 +10,57 @@ MainWindow::MainWindow(QWidget *parent)
 MainWindow::~MainWindow()
 {
     delete ui;
-}
-
-int MainWindow::randomInt(int min, int max)
-{
-    return (std::rand() % (max - min) + min);
+    delete lineBetweenMoveAndScore;
+    delete lineBetweenScoreAndButtons;
+    delete nameLineEdit;
+    delete saveRecordDialog;
+    delete buttonBox;
+    delete scoreLabel;
+    delete moveLabel;
+    delete yourLabel;
+    delete computerLabel;
+    delete yourMoveLabel;
+    delete computerMoveLabel;
+    delete yourScoreLabel;
+    delete computerScoreLabel;
+    delete crossFirstLabel;
+    delete randomLabel;
+    delete saveRecordLabel;
+    delete crossButton;
+    delete noughtButton;
+    delete playButton;
+    delete continueButton;
+    delete againButton;
+    delete finishButton;
+    delete saveButton;
+    delete crossFirstButton;
+    delete randomButton;
+    delete crossLamp;
+    delete noughtLamp;
+    delete layout;
+    delete mainLayout;
+    delete sideLayout;
+    delete playGroupBoxLayout;
+    delete characterChooseLayout;
+    delete inGameLayout;
+    delete scoreLayout;
+    delete moveLayout;
+    delete scoreIndicatorLayout;
+    delete moveIndicatorLayout;
+    delete yourScoreLayout;
+    delete computerScoreLayout;
+    delete moveYourIndicatorLayout;
+    delete moveComputerIndicatorLayout;
+    delete crossFirstLayout;
+    delete randomLayout;
+    delete saveRecordLayout;
+    delete playGroupBox;
+    delete inGameGroupBox;
+    delete mainFont;
+    delete screenSaver;
+    delete leaderBoard;
+    delete ticTacToe;
+    delete centralWidget;
 }
 
 
@@ -27,6 +73,14 @@ void MainWindow::saveRecord()
                                  "Введите своё имя:");
         return;
     }
+    for (auto &elem : name)
+        if (elem < 32 || 127 < elem)
+        {
+            saveRecordLabel->setText("Вы использовали некорректные символы!\n"
+                                     "Введите своё имя:");
+            return;
+        }
+
     for (auto &elem : leadersList)
         if (elem.getName() == name)
         {
@@ -44,10 +98,11 @@ void MainWindow::saveRecord()
                                                    };
 
     while (leaderboardList.find(coefficient) != leaderboardList.end())
-        coefficient += 0.1;
+        coefficient -= 0.1;
 
     leaderboardList.insert(std::make_pair(coefficient, inner_map));
 
+    leadersList.clear();
     for (auto it = leaderboardList.rbegin(); it != leaderboardList.rend(); ++it)
     {
         if (std::find(leadersList.begin(), leadersList.end(), Leader(it->second["name"], it->second["your score"], it->second["computer score"])) == leadersList.end())
@@ -67,16 +122,13 @@ void MainWindow::saveRecord()
 
     mainLayout->removeWidget(ticTacToe);
     mainLayout->removeItem(sideLayout);
-//    mainLayout->addWidget(screenSaver);
     mainLayout->addWidget(leaderBoard);
     mainLayout->addItem(sideLayout);
     sideLayout->removeWidget(inGameGroupBox);
-//    sideLayout->addWidget(leaderBoard);
     sideLayout->addItem(crossFirstLayout);
     sideLayout->addItem(randomLayout);
     sideLayout->addWidget(playGroupBox);
 
-//    screenSaver->QWidget::setVisible(true);
     leaderBoard->QWidget::setVisible(true);
     playGroupBox->QWidget::setVisible(true);
     randomLabel->QWidget::setVisible(true);
@@ -93,7 +145,7 @@ void MainWindow::saveRecord()
                                "border-radius: 8px;"
                                "}");
     noughtButton->setStyleSheet(".QPushButton {"
-                                + crossImageURL
+                                + noughtImageURL
                                 + notPressedChooseButton +
                                 "border-radius: 8px;"
                                 "}");

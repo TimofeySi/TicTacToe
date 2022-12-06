@@ -16,12 +16,9 @@ void MainWindow::playButton_clicked()
     crossFirstButton->QWidget::setVisible(false);
     crossFirstLabel->QWidget::setVisible(false);
 
-//    screenSaver->QWidget::setVisible(false);
     playGroupBox->setVisible(false);
-//    mainLayout->removeWidget(screenSaver);
     mainLayout->removeWidget(leaderBoard);
     mainLayout->removeItem(sideLayout);
-//    sideLayout->removeWidget(leaderBoard);
     sideLayout->removeWidget(playGroupBox);
     sideLayout->removeItem(crossFirstLayout);
     sideLayout->removeItem(randomLayout);
@@ -125,7 +122,7 @@ void MainWindow::playButton_clicked()
     againButton->setCursor(Qt::PointingHandCursor);
     connect(againButton, SIGNAL(clicked()), this, SLOT(againButton_clicked()));
 
-    finishButton = new QPushButton("Закончить");
+    finishButton = new QPushButton("Завершить");
     finishButton->setFont(*mainFont);
     finishButton->setMaximumHeight(90);
     finishButton->setStyleSheet(".QPushButton {"
@@ -248,9 +245,6 @@ void MainWindow::playButton_clicked()
 
     ////////////////////////////////////////////////////////////////////////// end of adding to layouts
 
-
-    //    userCharacter = int(Character::None);
-
     ticTacToe->show();
     this->update();
     this->move(QPoint((screenWidth - this->width()) / 2, (screenHeight- this->height()) / 2));
@@ -317,6 +311,14 @@ void MainWindow::againButton_clicked()
                                   "}");
 
         ticTacToe->countdown(gameMode);
+
+        delete finish_button;
+        delete continue_button;
+    }
+    if (msg_box.clickedButton() == continue_button)
+    {
+        delete finish_button;
+        delete continue_button;
     }
 }
 
@@ -341,15 +343,12 @@ void MainWindow::finishButton_clicked()
                     mainLayout->removeWidget(ticTacToe);
                     mainLayout->addWidget(leaderBoard);
                     mainLayout->removeItem(sideLayout);
-            //                    mainLayout->addWidget(screenSaver);
                     mainLayout->addItem(sideLayout);
                     sideLayout->removeWidget(inGameGroupBox);
-            //                    sideLayout->addWidget(leaderBoard);
                     sideLayout->addItem(crossFirstLayout);
                     sideLayout->addItem(randomLayout);
                     sideLayout->addWidget(playGroupBox);
 
-//                    screenSaver->QWidget::setVisible(true);
                     leaderBoard->QWidget::setVisible(true);
                     playGroupBox->QWidget::setVisible(true);
                     randomLabel->QWidget::setVisible(true);
@@ -366,7 +365,7 @@ void MainWindow::finishButton_clicked()
                                                "border-radius: 20px;"
                                                "}");
                     noughtButton->setStyleSheet(".QPushButton {"
-                                               + crossImageURL
+                                               + noughtImageURL
                                                 + notPressedChooseButton +
                                                 "border-radius: 20px;"
                                                "}");
@@ -386,6 +385,9 @@ void MainWindow::finishButton_clicked()
                     userCharacter = int(Character::None);
                     gameMode = int(GameMode::CrossFirst);
 
+                    delete continue_button;
+                    delete finish_with_save_button;
+                    delete finish_button;
                     this->update();
                 }
                 else
@@ -393,7 +395,7 @@ void MainWindow::finishButton_clicked()
             saveRecordDialog = new QDialog(this);
 
             nameLineEdit = new QLineEdit(saveRecordDialog);
-            nameLineEdit->setMaxLength(10);
+            nameLineEdit->setMaxLength(15);
 
             saveRecordLabel = new QLabel(saveRecordDialog);
             saveRecordLabel->setText("Введите своё имя:");
@@ -414,6 +416,10 @@ void MainWindow::finishButton_clicked()
 
             saveRecordDialog->show();
 
+            delete continue_button;
+            delete finish_with_save_button;
+            delete finish_button;
+
         }
     }
     else if (msg_box.clickedButton() == finish_button)
@@ -424,15 +430,12 @@ void MainWindow::finishButton_clicked()
         mainLayout->removeWidget(ticTacToe);
         mainLayout->addWidget(leaderBoard);
         mainLayout->removeItem(sideLayout);
-//                    mainLayout->addWidget(screenSaver);
         mainLayout->addItem(sideLayout);
         sideLayout->removeWidget(inGameGroupBox);
-//                    sideLayout->addWidget(leaderBoard);
         sideLayout->addItem(crossFirstLayout);
         sideLayout->addItem(randomLayout);
         sideLayout->addWidget(playGroupBox);
 
-//                    screenSaver->QWidget::setVisible(true);
         leaderBoard->QWidget::setVisible(true);
         playGroupBox->QWidget::setVisible(true);
         randomLabel->QWidget::setVisible(true);
@@ -469,7 +472,17 @@ void MainWindow::finishButton_clicked()
         userCharacter = int(Character::None);
         gameMode = int(GameMode::CrossFirst);
 
+        delete continue_button;
+        delete finish_with_save_button;
+        delete finish_button;
+
         this->update();
+    }
+    else if (msg_box.clickedButton() == continue_button)
+    {
+        delete continue_button;
+        delete finish_with_save_button;
+        delete finish_button;
     }
 }
 
